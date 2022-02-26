@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GAN Cocktail: mixing GANs without dataset access</title>
+  <link rel="icon" href="static/images/favicon.ico">
+  <link rel="canonical" href="https://omriavrahami.com/GAN-cocktail-page" />
+
+  <!-- Global site tag (gtag.js) - Google Analytics
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJE6NY298X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-YJE6NY298X');
+  </script> -->
+
+  <!-- Meta tags -->
+  <meta name="keywords" content="GAN Cocktail, mixing GANs">
+  <meta property="og:site_name" content="GAN Cocktail: mixing GANs without dataset access">
+  <meta property="og:title" content="GAN Cocktail: mixing GANs without dataset access">
+  <meta name="description" content="A novel method for mixing generative adversarial networks.">
+  <meta property="og:description" content="A novel method for mixing generative adversarial networks.">
+  <meta property="og:image" itemprop="image"
+    content="https://omriavrahami.com/GAN-cocktail-page/static/images/teaser.jpg">
+  <meta property="og:type" content="website" />
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="300">
+  <meta property="og:image:height" content="300">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">GAN Cocktail: mixing GANs without dataset access</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://omriavrahami.com">Omri Avrahami</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://www.cs.huji.ac.il/~danix/">Dani Lischinski</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://www.ohadf.com/">Ohad Fried</a><sup>2</sup>,
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>The Hebrew University of Jerusalem,</span>
+              <span class="author-block"><sup>2</sup>Reichman University</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2106.03847" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+
+                <!-- Video Link.
+                <span class="link-block">
+                  <a href="TODO"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span> -->
+
+                <!-- Code Link. -->
+                <!-- <span class="link-block">
+                  <a href="https://github.com/omriav/blended-diffusion"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span> -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div id="teaser" class="has-text-centered">
+          <img style="width: 60%;" src="./static/images/teaser.jpg">
+        </div>
+
+        <h2 class="subtitle has-text-centered">
+          <span class="method-name">GAN Cocktail</span> is a method of merging several pre-trained Generative
+          Adversarial Networks (GANs) into a single model with a <strong>shared latent embedding space</strong> that is
+          able to generate images from all the source domains. By decomposing the mixing process into two stages:
+          rooting (depicted in the image above) and merging, we are able to achieve SOTA results.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract. -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Today's generative models are capable of synthesizing high-fidelity images, but each model specializes on
+              a specific target domain. This raises the need for model merging: combining two or more pretrained
+              generative models into a single unified one. In this work we tackle the problem of model merging, given
+              two constraints that often come up in the real world: (1) no access to the original training data, and (2)
+              without increasing the size of the neural network. To the best of our knowledge, model merging under these
+              constraints has not been studied thus far.
+            </p>
+
+            <p>
+              We propose a novel, two-stage solution. In the first stage, we transform the weights of all the models to
+              the same parameter space by a technique we term model rooting. In the second stage, we merge the rooted
+              models by averaging their weights and fine-tuning them for each specific domain, using only data generated
+              by the original trained models.
+              We demonstrate that our approach is superior to baseline methods and to existing transfer learning
+              techniques, and investigate several applications.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Motivation -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-12">
+          <h2 class="title is-3">Motivation</h2>
+
+          <div class="content has-text-justified">
+            <p>
+              Generative adversarial networks (GANs) have achieved impressive results in neural image synthesis.
+              However, these generative models typically specialize on a specific image domain, such as human faces,
+              kitchens, or landscapes. This is in contrary to traditional computer graphics, where a general purpose
+              representation (e.g., textured meshes) and a general purpose renderer can produce images of diverse object
+              types and scenes. In order to extend the applicability and versatility of neural image synthesis, in this
+              work we explore <i>model merging</i> - the process of combining two or more generative models into a
+              single conditional model.
+            </p>
+
+            <p>
+              A problem arises when one wants to use several pre-trained generators for semantic manipulations (e.g.,
+              interpolating between images from GAN A and GAN B) - the different models do not share the same
+              latent representation, and hence do not "speak the same language".
+              Model merging places several GANs in a shared latent space, allowing such cross-domain semantic
+              manipulations.
+            </p>
+
+            <p>
+              We tackle the problem of merging several GAN models into a single one under the following real-world
+              constraints:
+            <ol>
+              <li>
+                <strong>No access to training data.</strong> Many GAN models are being released without the data that
+                they were trained on. This can occur because datasets are too large or due to privacy/copyright issues.
+                Hence, we assume that no training data is available, and only rely on data generated by the pre-trained
+                models.
+              </li>
+              <li> <strong>Limited computing power.</strong> A naive and inefficient approach to merging several GAN
+                models
+                is to sample from them separately (e.g., by multinomial sampling functions). The
+                problem with this approach is that the model size and inference time grow linearly with the number of
+                GAN models, which may not be practical due to lack of computing power (e.g., edge devices).
+                In addition, this approach does not result in a shared latent space, so it does not support cross-domain
+                semantic manipulations as described earlier. Our goal is to maintain a constant network size, regardless
+                of the number of GANs being merged.
+              </li>
+            </ol>
+            </p>
+
+            <!-- <div class="container">
+              <img src="./static/images/method.jpg" />
+              <br />
+              <br />
+            </div>
+
+            <p>For more details please read the paper.</p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-12">
+          <h2 class="title is-3">Method</h2>
+
+          <div class="content has-text-justified">
+            <p>
+              One way to combine several neural networks is by performing some arithmetic operations on their
+              parameters. For example, Exponential Moving Average (EMA) is a technique for averaging the model weights
+              during the training process in order to merge several versions of the same model (from different
+              checkpoints during the training process).
+            </p>
+
+            <p>
+              A key feature in the EMA case is that the averaging is performed on the same model from different training
+              stages. Thus, we can say that the averaging is done on models that share the same <strong>common
+                ancestor</strong> model, and we hypothesize that this property is key to the success of the merging
+              procedure.
+            </p>
+
+            <p>
+              Inspired by this observation, we propose to start the merging process by first perform a model rooting -
+              converting all the models to be in the same weights semantic space by fine-tuning, and only them perform
+              the merging by and additional fine-tuning. The effectiveness of the rooting stage can be even seen
+              visually as depicted in the following figure:
+            </p>
+
+            <div class="container">
+              <img src="./static/images/method.jpg" />
+            </div>
+
+            <p>For more details please read the paper.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-12">
+          <h2 class="title is-3">Results</h2>
+
+          <div class="content has-text-justified">
+            <p>
+              We compared our method to other SOTA methods and found that under all the training datasets our method
+              outperformed the baselines:
+            </p>
+
+            <div class="container is-centered">
+              <img src="./static/images/fid_comparison.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Applications -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-12">
+          <h2 class="title is-3">Applications</h2>
+
+          <div class="content has-text-justified">
+            <p>
+              Merging several pre-trained GANs into a shared latent embedding space can be beneficial for many
+              applications. For example:
+            </p>
+
+            <h5>Images Latent Interpolation</h5>
+            <p>
+              The shared latent space can be leveraged in order to perform latent space Interpolation between images of
+              different modalities.
+            </p>
+            <div class="container is-centered">
+              <img src="./static/images/latent_interpolation.jpg" />
+              <br />
+              <br />
+            </div>
+
+            <h5>Style Mixing</h5>
+            <p>
+              When using special GAN architectures that encourages disentanglement properties, such as StyleGAN, we can
+              perform style mixing between images of different modalities.
+            </p>
+            <div class="container is-centered">
+              <img src="./static/images/style_mixing.jpg" />
+              <br />
+              <br />
+            </div>
+
+            <h5>Image editing using semantic directions</h5>
+            <p>
+              We can calculate semantic direction in the latent space by taking the direction of the normal to the
+              hyperplane calculated by SVM and going along this direction.
+            </p>
+
+            <p>
+              If we can find the desired labels easily on only on of the modalities (e.g., we have a human face
+              orientation classifier), we can calculate the direction using only samples from this domain, and apply
+              it to the other domain (because of the shared latent embedding space).
+            </p>
+
+            <div class="container is-centered">
+              <img src="./static/images/latnet_space_orientation.jpg" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bibtex -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <p>If you find this research useful, please cite the following:</p>
+
+      <pre><code>@article{avrahami2021gan,
+        title={GAN Cocktail: mixing GANs without dataset access},
+        author={Avrahami, Omri and Lischinski, Dani and Fried, Ohad},
+        journal={arXiv preprint arXiv:2106.03847},
+        year={2021}
+}</code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="https://arxiv.org/abs/2106.03847">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <!-- <a class="icon-link" href="https://github.com/omriav/blended-diffusion" class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a> -->
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Was adapted from <a href="https://github.com/nerfies/nerfies.github.io">this</a> source code.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
